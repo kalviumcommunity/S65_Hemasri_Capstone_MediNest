@@ -5,7 +5,7 @@ const app = express();
 const PORT = 5000;
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/healthcareDB", {
+mongoose.connect("mongodb+srv://guthulahemasri410:Hemasri1709@cluster0.tfekj.mongodb.net/HealthCare-MediNest", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
