@@ -1,0 +1,17 @@
+{
+  "name": "s65_hemasri_capstone_medinest-main",
+  "version": "1.0.0",
+  "description": "## **Project Overview**   The **Healthcare Management System** is a comprehensive application designed to enhance patient care by providing online consultation services, including video call functionality. This platform integrates various hospital departments and facilitates seamless communication between patients and healthcare providers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.13.1",
+    "nodemon": "^3.1.9"
+  }
+}
