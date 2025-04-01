@@ -7,15 +7,18 @@ const doctors = [
     { id: 2, name: 'Dr. Rajesh Kumar', department: 'Orthopedics' }
 ];
 
+
 const patients = [
     { id: 1, name: 'Aarav Mehta', age: 25 },
     { id: 2, name: 'Ishita Verma', age: 32 }
 ];
 
+
 const appointments = [
     { id: 1, patientId: 1, doctorId: 1, date: '2025-04-05' },
     { id: 2, patientId: 2, doctorId: 2, date: '2025-04-06' }
 ];
+
 
 // PUT endpoint to update a doctor
 router.put('/doctors/:id', (req, res) => {
@@ -24,10 +27,11 @@ router.put('/doctors/:id', (req, res) => {
     const doctor = doctors.find(d => d.id === parseInt(id));
 
     if (!doctor) {
-        return res.status(404).json({ error: 'Doctor not found' });
+        return res.status(404).json({ error: 'Doctor not found here!!!' });
     }
 
     if (name) doctor.name = name;
+    
     if (department) doctor.department = department;
 
     res.status(200).json({ message: 'Doctor updated successfully', doctor });
