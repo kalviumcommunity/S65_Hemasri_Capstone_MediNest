@@ -10,12 +10,10 @@ app.use(express.json());
 // Import routes
 const getRoutes = require('./routes/getRoutes');
 const postRoutes = require('./routes/postRoutes');
-const putRoutes = require('./routes/putRoutes'); // New import for PUT routes
 
 // Use routes
 app.use('/api', getRoutes);
 app.use('/api', postRoutes);
-app.use('/api', putRoutes); // Register PUT routes
 
 // Start the server
 app.listen(PORT, () => {
