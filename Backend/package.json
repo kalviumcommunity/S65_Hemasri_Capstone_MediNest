@@ -4,9 +4,7 @@
   "description": "The **Healthcare Management System** is a comprehensive application designed to enhance patient care by providing online consultation services, including video call functionality. This platform integrates various hospital departments and facilitates seamless communication between patients and healthcare providers.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

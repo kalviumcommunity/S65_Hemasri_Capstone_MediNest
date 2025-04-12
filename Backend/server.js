@@ -10,10 +10,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.log("MongoDB connection error:", err));
 
@@ -21,13 +18,13 @@ mongoose.connect(process.env.MONGO_URI, {
 const getRoutes = require('./routes/getRoutes');
 const postRoutes = require('./routes/postRoutes');
 const putRoutes = require('./routes/putRoutes');
-const patientRoutes = require('./get-api'); // the one with MongoDB-based patient fetching
+
 
 // Use Routes
 app.use('/api', getRoutes);
 app.use('/api', postRoutes);
 app.use('/api', putRoutes);
-app.use('/api/patients', patientRoutes);
+
 
 // Start the server
 app.listen(PORT, () => {
