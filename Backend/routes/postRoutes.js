@@ -18,36 +18,59 @@ const appointments = [
 ];
 
 // POST endpoint to add a new doctor
-router.post('/doctors', (req, res) => {
-    const { name, department } = req.body;
-    if (!name || !department) {
-        return res.status(400).json({ error: 'Name and department are required' });
+router.post('/doctors', async (req, res) => {
+    try {
+        const { name, department } = req.body;
+        if (!name || !department) {
+            return res.status(400).json({ error: 'Name and department are required' });
+        }
+
+        const newDoctor = { id: doctors.length + 1, name, department };
+        doctors.push(newDoctor);
+        res.status(201).json(newDoctor);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add doctor', details: error.message });
     }
-    const newDoctor = { id: doctors.length + 1, name, department };
-    doctors.push(newDoctor);
-    res.status(201).json(newDoctor);
 });
 
 // POST endpoint to add a new patient
-router.post('/patients', (req, res) => {
-    const { name, age } = req.body;
-    if (!name || !age) {
-        return res.status(400).json({ error: 'Name and age are required' });
+router.post('/patients', async (req, res) => {
+    try {
+        const { name, age } = req.body;
+        if (!name || !age) {
+            return res.status(400).json({ error: 'Name and age are required' });
+        }
+
+        const newPatient = { id: patients.length + 1, name, age };
+        patients.push(newPatient);
+        res.status(201).json(newPatient);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add patient', details: error.message });
     }
-    const newPatient = { id: patients.length + 1, name, age };
-    patients.push(newPatient);
-    res.status(201).json(newPatient);
 });
 
 // POST endpoint to add a new appointment
-router.post('/appointments', (req, res) => {
-    const { patientId, doctorId, date } = req.body;
-    if (!patientId || !doctorId || !date) {
-        return res.status(400).json({ error: 'Patient ID, Doctor ID, and date are required' });
+router.post('/appointments', async (req, res) => {
+    try {
+        const { patientId, doctorId, date } = req.body;
+        if (!patientId || !doctorId || !date) {
+            return res.status(400).json({ error: 'Patient ID, Doctor ID, and date are required' });
+        }
+
+        // Validate if doctor and patient exist
+        const doctorExists = doctors.find(doc => doc.id === doctorId);
+        const patientExists = patients.find(pat => pat.id === patientId);
+
+        if (!doctorExists || !patientExists) {
+            return res.status(404).json({ error: 'Doctor or Patient not found' });
+        }
+
+        const newAppointment = { id: appointments.length + 1, patientId, doctorId, date };
+        appointments.push(newAppointment);
+        res.status(201).json(newAppointment);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create appointment', details: error.message });
     }
-    const newAppointment = { id: appointments.length + 1, patientId, doctorId, date };
-    appointments.push(newAppointment);
-    res.status(201).json(newAppointment);
 });
 
 module.exports = router;

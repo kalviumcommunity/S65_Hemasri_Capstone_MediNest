@@ -21,53 +21,89 @@ const appointments = [
 
 
 // PUT endpoint to update a doctor
-router.put('/doctors/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, department } = req.body;
-    const doctor = doctors.find(d => d.id === parseInt(id));
+router.put('/doctors/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, department } = req.body;
+        const doctor = doctors.find(d => d.id === parseInt(id));
 
-    if (!doctor) {
-        return res.status(404).json({ error: 'Doctor not found here!!!' });
+        if (!doctor) {
+            return res.status(404).json({ error: 'Doctor not found here!!!' });
+        }
+
+        if (name) doctor.name = name;
+        if (department) doctor.department = department;
+
+        res.status(200).json({ message: 'Doctor updated successfully', doctor });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update doctor', details: error.message });
     }
-
-    if (name) doctor.name = name;
-    
-    if (department) doctor.department = department;
-
-    res.status(200).json({ message: 'Doctor updated successfully', doctor });
 });
 
 // PUT endpoint to update a patient
-router.put('/patients/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, age } = req.body;
-    const patient = patients.find(p => p.id === parseInt(id));
+router.put('/patients/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, age } = req.body;
+        const patient = patients.find(p => p.id === parseInt(id));
 
-    if (!patient) {
-        return res.status(404).json({ error: 'Patient not found' });
+        if (!patient) {
+            return res.status(404).json({ error: 'Patient not found' });
+        }
+
+        if (name) patient.name = name;
+        if (age) {
+            if (age < 0 || age > 120) {
+                return res.status(400).json({ error: 'Invalid age value' });
+            }
+            patient.age = age;
+        }
+
+        res.status(200).json({ message: 'Patient updated successfully', patient });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update patient', details: error.message });
     }
-
-    if (name) patient.name = name;
-    if (age) patient.age = age;
-
-    res.status(200).json({ message: 'Patient updated successfully', patient });
 });
 
 // PUT endpoint to update an appointment
-router.put('/appointments/:id', (req, res) => {
-    const { id } = req.params;
-    const { patientId, doctorId, date } = req.body;
-    const appointment = appointments.find(a => a.id === parseInt(id));
+router.put('/appointments/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { patientId, doctorId, date } = req.body;
+        const appointment = appointments.find(a => a.id === parseInt(id));
 
-    if (!appointment) {
-        return res.status(404).json({ error: 'Appointment not found' });
+        if (!appointment) {
+            return res.status(404).json({ error: 'Appointment not found' });
+        }
+
+        if (patientId) {
+            const patientExists = patients.find(p => p.id === patientId);
+            if (!patientExists) {
+                return res.status(404).json({ error: 'Patient not found' });
+            }
+            appointment.patientId = patientId;
+        }
+
+        if (doctorId) {
+            const doctorExists = doctors.find(d => d.id === doctorId);
+            if (!doctorExists) {
+                return res.status(404).json({ error: 'Doctor not found' });
+            }
+            appointment.doctorId = doctorId;
+        }
+
+        if (date) {
+            const appointmentDate = new Date(date);
+            if (isNaN(appointmentDate)) {
+                return res.status(400).json({ error: 'Invalid date format' });
+            }
+            appointment.date = date;
+        }
+
+        res.status(200).json({ message: 'Appointment updated successfully', appointment });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update appointment', details: error.message });
     }
-
-    if (patientId) appointment.patientId = patientId;
-    if (doctorId) appointment.doctorId = doctorId;
-    if (date) appointment.date = date;
-
-    res.status(200).json({ message: 'Appointment updated successfully', appointment });
 });
 
 module.exports = router;
