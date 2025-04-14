@@ -18,47 +18,72 @@ const appointments = [
 ];
 
 // GET endpoint to fetch all doctors
-router.get('/doctors', (req, res) => {
-    res.json(doctors);
+router.get('/doctors', async (req, res) => {
+    try {
+        console.log('GET /doctors route accessed');
+        res.json(doctors);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // GET endpoint to fetch a specific doctor by ID
-router.get('/doctors/:id', (req, res) => {
-    const doctor = doctors.find(d => d.id === parseInt(req.params.id));
-    if (doctor) {
-        res.json(doctor);
-    } else {
-        res.status(404).json({ error: 'Doctor not found' });
+router.get('/doctors/:id', async (req, res) => {
+    try {
+        const doctor = doctors.find(d => d.id === parseInt(req.params.id));
+        if (doctor) {
+            res.json(doctor);
+        } else {
+            res.status(404).json({ error: 'Doctor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 // GET endpoint to fetch all patients
-router.get('/patients', (req, res) => {
-    res.json(patients);
+router.get('/patients', async (req, res) => {
+    try {
+        res.json(patients);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // GET endpoint to fetch a specific patient by ID
-router.get('/patients/:id', (req, res) => {
-    const patient = patients.find(p => p.id === parseInt(req.params.id));
-    if (patient) {
-        res.json(patient);
-    } else {
-        res.status(404).json({ error: 'Patient not found' });
+router.get('/patients/:id', async (req, res) => {
+    try {
+        const patient = patients.find(p => p.id === parseInt(req.params.id));
+        if (patient) {
+            res.json(patient);
+        } else {
+            res.status(404).json({ error: 'Patient not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 // GET endpoint to fetch all appointments
-router.get('/appointments', (req, res) => {
-    res.json(appointments);
+router.get('/appointments', async (req, res) => {
+    try {
+        res.json(appointments);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // GET endpoint to fetch a specific appointment by ID
-router.get('/appointments/:id', (req, res) => {
-    const appointment = appointments.find(a => a.id === parseInt(req.params.id));
-    if (appointment) {
-        res.json(appointment);
-    } else {
-        res.status(404).json({ error: 'Appointment not found' });
+router.get('/appointments/:id', async (req, res) => {
+    try {
+        const appointment = appointments.find(a => a.id === parseInt(req.params.id));
+        if (appointment) {
+            res.json(appointment);
+        } else {
+            res.status(404).json({ error: 'Appointment not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
