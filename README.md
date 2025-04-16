@@ -83,5 +83,5 @@ Given my personal experiences with health-related challenges, I am passionate ab
 
 ---
 
-This document serves as a roadmap for the Healthcare Management System project, ensuring a structured and organized approach toward successful completion. 🚀  
+This document serves as a roadmap for the Healthcare Management System project, ensuring a structured and organized approach toward successful completion. 
 
