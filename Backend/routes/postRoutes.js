@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const Doctor = require('../models/DoctorModel');
 const Patient = require('../models/PatientModel');
@@ -9,12 +10,17 @@ const Appointment = require('../models/AppointmentModel');
 router.post('/doctors', async (req, res) => {
     try {
         const doctor = await Doctor.create(req.body);
+
+        // Optional: Skip this if not needed — create() already returns the doc
+        const savedDoctor = await Doctor.findById(doctor._id);
+
         res.status(201).json({
             success: true,
             message: 'Doctor added successfully',
-            data: doctor
+            data: savedDoctor
         });
     } catch (error) {
+        console.error('Doctor creation error:', error);
         res.status(400).json({
             success: false,
             message: 'Failed to add doctor',
@@ -27,12 +33,14 @@ router.post('/doctors', async (req, res) => {
 router.post('/patients', async (req, res) => {
     try {
         const patient = await Patient.create(req.body);
+
         res.status(201).json({
             success: true,
             message: 'Patient added successfully',
             data: patient
         });
     } catch (error) {
+        console.error('Patient creation error:', error);
         res.status(400).json({
             success: false,
             message: 'Failed to add patient',
@@ -46,17 +54,17 @@ router.post('/appointments', async (req, res) => {
     try {
         const { patientId, doctorId, appointmentDate, timeSlot, reason } = req.body;
 
-        // Validate required fields
+        // Input validation
         if (!patientId || !doctorId || !appointmentDate || !timeSlot || !reason) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields are required: patientId, doctorId, appointmentDate, timeSlot, reason'
+                message: 'All fields are required'
             });
         }
 
         // Check if doctor exists
-        const doctorExists = await Doctor.findById(doctorId);
-        if (!doctorExists) {
+        const doctor = await Doctor.findById(doctorId);
+        if (!doctor) {
             return res.status(404).json({
                 success: false,
                 message: 'Doctor not found'
@@ -64,11 +72,26 @@ router.post('/appointments', async (req, res) => {
         }
 
         // Check if patient exists
-        const patientExists = await Patient.findById(patientId);
-        if (!patientExists) {
+        const patient = await Patient.findById(patientId);
+        if (!patient) {
             return res.status(404).json({
                 success: false,
                 message: 'Patient not found'
+            });
+        }
+
+        // Check for existing appointment
+        const existingAppointment = await Appointment.findOne({
+            doctorId,
+            appointmentDate,
+            timeSlot,
+            status: 'Scheduled'
+        });
+
+        if (existingAppointment) {
+            return res.status(409).json({
+                success: false,
+                message: 'Time slot already booked'
             });
         }
 
@@ -87,17 +110,8 @@ router.post('/appointments', async (req, res) => {
             message: 'Appointment created successfully',
             data: newAppointment
         });
-
     } catch (error) {
-        // Check if error is a MongoDB validation error
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({
-                success: false,
-                message: 'Validation Error',
-                error: error.message
-            });
-        }
-
+        console.error('Appointment creation error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to create appointment',
