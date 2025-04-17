@@ -4,21 +4,32 @@ const appointmentSchema = new mongoose.Schema({
     patientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Patient',
-        required: true
+        required: [true, 'Patient ID is required']
     },
     doctorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Doctor',
-        required: true
+        required: [true, 'Doctor ID is required']
     },
-    date: {
+    appointmentDate: {
         type: Date,
-        required: true
+        required: [true, 'Appointment date is required']
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
+    timeSlot: {
+        type: String,
+        required: [true, 'Time slot is required']
+    },
+    status: {
+        type: String,
+        enum: ['Scheduled', 'Completed', 'Cancelled'],
+        default: 'Scheduled'
+    },
+    reason: {
+        type: String,
+        required: [true, 'Reason for appointment is required']
     }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);
