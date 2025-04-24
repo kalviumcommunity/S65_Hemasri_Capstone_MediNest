@@ -21,12 +21,10 @@ const getRoutes = require('./routes/getRoutes');
 const postRoutes = require('./routes/postRoutes');
 const putRoutes = require('./routes/putRoutes');
 
-
 // Use Routes
 app.use('/api', getRoutes);
 app.use('/api', postRoutes);
 app.use('/api', putRoutes);
-
 
 // Start the server
 app.listen(PORT, () => {
