@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Mock Data
+//mock data
 const doctors = [
     { id: 1, name: 'Dr. Aditi Sharma', department: 'Neurology' },
     { id: 2, name: 'Dr. Rajesh Kumar', department: 'Orthopedics' }
@@ -17,7 +17,7 @@ const appointments = [
     { id: 2, patientId: 2, doctorId: 2, date: '2025-04-06' }
 ];
 
-// PUT endpoint to update a doctor
+
 router.put('/doctors/:id', (req, res) => {
     const { id } = req.params;
     const { name, department } = req.body;
@@ -33,7 +33,7 @@ router.put('/doctors/:id', (req, res) => {
     res.status(200).json({ message: 'Doctor updated successfully', doctor });
 });
 
-// PUT endpoint to update a patient
+// PUT endpoint to update a patient 
 router.put('/patients/:id', (req, res) => {
     const { id } = req.params;
     const { name, age } = req.body;
