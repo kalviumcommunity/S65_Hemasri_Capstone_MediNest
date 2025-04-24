@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Mock Data
+//mock data
 const doctors = [
     { id: 1, name: 'Dr. Aditi Sharma', department: 'Neurology' },
     { id: 2, name: 'Dr. Rajesh Kumar', department: 'Orthopedics' }
@@ -19,6 +19,14 @@ const appointments = [
     { id: 2, patientId: 2, doctorId: 2, date: '2025-04-06' }
 ];
 
+put-api
+
+router.put('/doctors/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, department } = req.body;
+    const doctor = doctors.find(d => d.id === parseInt(id));
+
+ main
 
 // PUT endpoint to update a doctor
 router.put('/doctors/:id', async (req, res) => {
@@ -39,6 +47,16 @@ router.put('/doctors/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to update doctor', details: error.message });
     }
 });
+
+ put-api
+// PUT endpoint to update a patient 
+router.put('/patients/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, age } = req.body;
+    const patient = patients.find(p => p.id === parseInt(id));
+
+    if (!patient) {
+        return res.status(404).json({ error: 'Patient not found' });
 
 // PUT endpoint to update a patient
 router.put('/patients/:id', async (req, res) => {
@@ -62,6 +80,7 @@ router.put('/patients/:id', async (req, res) => {
         res.status(200).json({ message: 'Patient updated successfully', patient });
     } catch (error) {
         res.status(500).json({ error: 'Failed to update patient', details: error.message });
+ main
     }
 });
 
