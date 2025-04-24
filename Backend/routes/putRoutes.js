@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Mock Data
+//mock data
 const doctors = [
     { id: 1, name: 'Dr. Aditi Sharma', department: 'Neurology' },
     { id: 2, name: 'Dr. Rajesh Kumar', department: 'Orthopedics' }
