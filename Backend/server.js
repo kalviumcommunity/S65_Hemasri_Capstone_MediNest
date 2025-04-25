@@ -11,6 +11,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Request logger
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
+
 // Connect to MongoDB
 connectDB();
 
@@ -23,6 +29,35 @@ const putRoutes = require('./routes/putRoutes');
 app.use('/api', getRoutes);
 app.use('/api', postRoutes);
 app.use('/api', putRoutes);
+
+// Root route
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Welcome to MediNest API',
+        endpoints: {
+            doctors: '/api/doctors',
+            patients: '/api/patients',
+            appointments: '/api/appointments'
+        }
+    });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        error: 'Route not found',
+        requestedPath: req.path
+    });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        error: 'Something broke!',
+        message: err.message
+    });
+});
 
 // Start the server
 app.listen(PORT, () => {
