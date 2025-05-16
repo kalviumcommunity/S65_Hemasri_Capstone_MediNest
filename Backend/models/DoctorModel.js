@@ -8,8 +8,7 @@ const doctorSchema = new mongoose.Schema({
     },
     department: {
         type: String,
-        required: [true, 'Department is required'],
-        enum: ['Neurology', 'Cardiology', 'Orthopedics', 'Pediatrics', 'General Medicine', 'Gynaecology', ]
+        required: [true, 'Department is required']
     },
     experience: {
         type: Number,
@@ -27,9 +26,28 @@ const doctorSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Contact number is required'],
         match: [/^\d{10}$/, 'Please enter a valid 10-digit contact number']
-    }
+    },
+    // Relationships
+    appointments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Appointment'
+    }],
+    patients: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Patient'
+    }]
 }, {
     timestamps: true
+});
+
+// Pre-save middleware to update relationships
+doctorSchema.pre('save', async function(next) {
+    if (this.isNew) {
+        // Initialize empty arrays for new doctors
+        this.appointments = [];
+        this.patients = [];
+    }
+    next();
 });
 
 module.exports = mongoose.model('Doctor', doctorSchema);

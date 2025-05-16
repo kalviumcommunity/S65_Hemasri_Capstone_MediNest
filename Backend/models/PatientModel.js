@@ -22,14 +22,40 @@ const patientSchema = new mongoose.Schema({
         required: [true, 'Contact number is required'],
         match: [/^\d{10}$/, 'Please enter a valid 10-digit contact number']
     },
+    // Relationships
+    appointments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Appointment'
+    }],
+    assignedDoctors: [{
+        doctor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Doctor'
+        },
+        since: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     medicalHistory: [{
         condition: String,
         diagnosis: String,
         treatment: String,
-        date: Date
+        date: Date,
+        treatedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Doctor'
+        }
     }]
 }, {
     timestamps: true
+});
+
+// Populate middleware
+patientSchema.pre('find', function(next) {
+    this.populate('appointments');
+    this.populate('assignedDoctors.doctor');
+    next();
 });
 
 module.exports = mongoose.model('Patient', patientSchema);
