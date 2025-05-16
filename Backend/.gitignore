@@ -1,2 +1,11 @@
+ put-api
+# Node dependencies
 node_modules/
 
+# Environment variables
+
+node_modules/
+.env
+
+
+ main

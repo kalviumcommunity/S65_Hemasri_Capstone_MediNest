@@ -1,64 +1,135 @@
 const express = require('express');
 const router = express.Router();
-
-// Mock Data
-const doctors = [
-    { id: 1, name: 'Dr. Aditi Sharma', department: 'Neurology' },
-    { id: 2, name: 'Dr. Rajesh Kumar', department: 'Orthopedics' }
-];
-
-const patients = [
-    { id: 1, name: 'Aarav Mehta', age: 25 },
-    { id: 2, name: 'Ishita Verma', age: 32 }
-];
-
-const appointments = [
-    { id: 1, patientId: 1, doctorId: 1, date: '2025-04-05' },
-    { id: 2, patientId: 2, doctorId: 2, date: '2025-04-06' }
-];
+const Doctor = require('../models/DoctorModel');
+const Patient = require('../models/PatientModel');
+const Appointment = require('../models/AppointmentModel');
 
 // GET endpoint to fetch all doctors
-router.get('/doctors', (req, res) => {
-    res.json(doctors);
+router.get('/doctors', async (req, res) => {
+    try {
+        const doctors = await Doctor.find({});
+        res.status(200).json({
+            success: true,
+            count: doctors.length,
+            data: doctors
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch doctors',
+            error: error.message
+        });
+    }
 });
 
 // GET endpoint to fetch a specific doctor by ID
-router.get('/doctors/:id', (req, res) => {
-    const doctor = doctors.find(d => d.id === parseInt(req.params.id));
-    if (doctor) {
-        res.json(doctor);
-    } else {
-        res.status(404).json({ error: 'Doctor not found' });
+router.get('/doctors/:id', async (req, res) => {
+    try {
+        const doctor = await Doctor.findById(req.params.id);
+        if (!doctor) {
+            return res.status(404).json({
+                success: false,
+                message: 'Doctor not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: doctor
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch doctor',
+            error: error.message
+        });
     }
 });
 
 // GET endpoint to fetch all patients
-router.get('/patients', (req, res) => {
-    res.json(patients);
-});
-
-// GET endpoint to fetch a specific patient by ID
-router.get('/patients/:id', (req, res) => {
-    const patient = patients.find(p => p.id === parseInt(req.params.id));
-    if (patient) {
-        res.json(patient);
-    } else {
-        res.status(404).json({ error: 'Patient not found' });
+router.get('/patients', async (req, res) => {
+    try {
+        const patients = await Patient.find({});
+        res.status(200).json({
+            success: true,
+            count: patients.length,
+            data: patients
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch patients',
+            error: error.message
+        });
     }
 });
 
-// GET endpoint to fetch all appointments
-router.get('/appointments', (req, res) => {
-    res.json(appointments);
+// GET endpoint to fetch a specific patient by ID
+router.get('/patients/:id', async (req, res) => {
+    try {
+        const patient = await Patient.findById(req.params.id);
+        if (!patient) {
+            return res.status(404).json({
+                success: false,
+                message: 'Patient not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: patient
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch patient',
+            error: error.message
+        });
+    }
+});
+
+// GET endpoint to fetch all appointments with populated data
+router.get('/appointments', async (req, res) => {
+    try {
+        const appointments = await Appointment.find({})
+            .populate('doctorId', 'name department')
+            .populate('patientId', 'name age');
+            
+        res.status(200).json({
+            success: true,
+            count: appointments.length,
+            data: appointments
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch appointments',
+            error: error.message
+        });
+    }
 });
 
 // GET endpoint to fetch a specific appointment by ID
-router.get('/appointments/:id', (req, res) => {
-    const appointment = appointments.find(a => a.id === parseInt(req.params.id));
-    if (appointment) {
-        res.json(appointment);
-    } else {
-        res.status(404).json({ error: 'Appointment not found' });
+router.get('/appointments/:id', async (req, res) => {
+    try {
+        const appointment = await Appointment.findById(req.params.id)
+            .populate('doctorId', 'name department')
+            .populate('patientId', 'name age');
+            
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Appointment not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: appointment
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch appointment',
+            error: error.message
+        });
     }
 });
 

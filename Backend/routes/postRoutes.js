@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+// Import models once
 const Doctor = require('../models/DoctorModel');
 const Patient = require('../models/PatientModel');
 const Appointment = require('../models/AppointmentModel');
@@ -10,14 +11,10 @@ const Appointment = require('../models/AppointmentModel');
 router.post('/doctors', async (req, res) => {
     try {
         const doctor = await Doctor.create(req.body);
-
-        // Optional: Skip this if not needed — create() already returns the doc
-        const savedDoctor = await Doctor.findById(doctor._id);
-
         res.status(201).json({
             success: true,
             message: 'Doctor added successfully',
-            data: savedDoctor
+            data: doctor
         });
     } catch (error) {
         console.error('Doctor creation error:', error);
@@ -33,7 +30,6 @@ router.post('/doctors', async (req, res) => {
 router.post('/patients', async (req, res) => {
     try {
         const patient = await Patient.create(req.body);
-
         res.status(201).json({
             success: true,
             message: 'Patient added successfully',
@@ -95,8 +91,7 @@ router.post('/appointments', async (req, res) => {
             });
         }
 
-        // Create appointment
-        const newAppointment = await Appointment.create({
+        const appointment = await Appointment.create({
             patientId,
             doctorId,
             appointmentDate,
@@ -108,7 +103,7 @@ router.post('/appointments', async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'Appointment created successfully',
-            data: newAppointment
+            data: appointment
         });
     } catch (error) {
         console.error('Appointment creation error:', error);

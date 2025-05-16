@@ -8,7 +8,12 @@ const doctorSchema = new mongoose.Schema({
     },
     department: {
         type: String,
+feature/db-relationships
         required: [true, 'Department is required']
+
+        required: [true, 'Department is required'],
+        enum: ['Neurology', 'Cardiology', 'Orthopedics', 'Pediatrics', 'General Medicine', 'Gynaecology', "Psychology"]
+main
     },
     experience: {
         type: Number,
