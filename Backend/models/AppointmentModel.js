@@ -44,7 +44,7 @@ const appointmentSchema = new mongoose.Schema({
 // Middleware to maintain relationships
 appointmentSchema.post('save', async function(doc) {
     try {
-        // Update doctor's appointments and patients
+        // Updating doctor's,appointments and patients
         await this.model('Doctor').findByIdAndUpdate(
             doc.doctorId,
             { 
@@ -55,7 +55,7 @@ appointmentSchema.post('save', async function(doc) {
             }
         );
 
-        // Update patient's appointments and doctors
+        // Updating patient's appointments and doctors
         await this.model('Patient').findByIdAndUpdate(
             doc.patientId,
             { 
