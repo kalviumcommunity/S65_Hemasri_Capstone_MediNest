@@ -81,6 +81,7 @@ Given my personal experiences with health-related challenges, I am passionate ab
 ## **Project Repository**  
 📌 GitHub Repository Link: **[Coming Soon]**  
 🌐 Backend Deployment: **[Live Server](https://s65-hemasri-capstone-medinest-4.onrender.com)**
+🌐 Frontend Deployment [Netlify]: **(https://medinesttt.netlify.app/)**
 ---
 
 This document serves as a roadmap for the Healthcare Management System project, ensuring a structured and organized approach toward successful completion. 
